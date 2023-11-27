@@ -9,8 +9,10 @@ const cors = require("cors");
 //const logger = require('./middleware/logger');
 const messagesRouter = require("./routes/api/v1/messages");
 
+require("dotenv").config();
+
 const mongoose = require("mongoose");
-mongoose.connect("mongodb://localhost:27017/express-messages", {});
+mongoose.connect(process.env.MONGODB);
 
 // use pug
 app.set("view engine", "pug");
