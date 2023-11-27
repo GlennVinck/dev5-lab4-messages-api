@@ -9,6 +9,9 @@ const cors = require("cors");
 //const logger = require('./middleware/logger');
 const messagesRouter = require("./routes/api/v1/messages");
 
+const mongoose = require("mongoose");
+mongoose.connect("mongodb://localhost:27017/express-messages", {});
+
 // use pug
 app.set("view engine", "pug");
 
