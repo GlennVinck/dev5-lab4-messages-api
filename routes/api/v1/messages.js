@@ -1,35 +1,42 @@
 //require express
-const express = require('express');
+const express = require("express");
 //create router
 const router = express.Router();
 
 router.get("/", (req, res) => {
-    res.json({
-        status: 'success',
-        message: 'GET messages',
-        data:[
+  res.json({
+    status: "success",
+    message: "GETTING messages",
+    data: {
+      messages: [
         {
-            id: 1,
-            name: 'John Doe',
-            message: 'Hello World',
+          id: 1,
+          user: "John Doe",
+          message: "Hello World",
         },
         {
-            id: 2,
-            name: 'John Doe',
-            message: 'Hello World 2',
-        }
-    ]
-    })
- })
-
+          id: 2,
+          user: "Jane Doe",
+          message: "Hello John",
+        },
+      ],
+    },
+  });
+});
 
 router.get("/:id", (req, res) => {
-        let message = req.params.id;
-    res.json({
-        status: 'success',
-        message: `GET message with id ${message}`,
-    })    
-     })
+  let id = req.params.id;
+  res.json({
+    status: "success",
+    message: `GETTING message with id ${id}`,
+    data: {
+      message: {
+        user: "John Doe",
+        message: "Hello World",
+      },
+    },
+  });
+});
 
 // router.get("/?user=username", (req, res) => {
 //     let message = req.params.username;
@@ -39,29 +46,29 @@ router.get("/:id", (req, res) => {
 //     })
 //     })
 
- router.post("/", (req, res) => {
-    let message = req.body.message;
-    res.json({
-        status: 'success',
-        message: `POST ${message}`,
-    })
- })
+router.post("/", (req, res) => {
+  let user = req.body.message.user;
 
- router.put("/:id", (req, res) => {
-    let message = req.params.id;
-    res.json({
-        status: 'success',
-        message: `UPDATING a message with id ${message}`,
-    })
- })
+  res.json({
+    status: "success",
+    message: `POSTING a new message for user ${user}`,
+  });
+});
 
+router.put("/:id", (req, res) => {
+  let id = req.params.id;
+  res.json({
+    status: "success",
+    message: `UPDATING a message with id ${id}`,
+  });
+});
 
- router.delete("/:id", (req, res) => {
-    let message = req.params.id;
-    res.json({
-        status: 'success',
-        message: `DELETING a message with id ${message}`,
-    })
- })
+router.delete("/:id", (req, res) => {
+  let id = req.params.id;
+  res.json({
+    status: "success",
+    message: `DELETING a message with id ${id}`,
+  });
+});
 
 module.exports = router;
