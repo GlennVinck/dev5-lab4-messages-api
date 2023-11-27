@@ -3,6 +3,17 @@ const express = require("express");
 //create router
 const router = express.Router();
 
+//connect mongoose and make schema
+const mongoose = require("mongoose");
+const Schema = mongoose.Schema;
+const messageSchema = new Schema({
+  id: Number,
+  user: String,
+  message: String,
+});
+
+const Message = mongoose.model("Message", messageSchema);
+
 router.get("/", (req, res) => {
   let user = req.query.user;
 
