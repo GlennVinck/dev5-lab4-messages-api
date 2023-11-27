@@ -59,12 +59,31 @@ router.get("/:id", (req, res) => {
 });
 
 router.post("/", (req, res) => {
-  let user = req.body.message.user;
+  // Create a new instance of the Message model
+  const message = new Message();
+  message.message = req.body.message.message;
+  message.user = req.body.message.user;
 
-  res.json({
-    status: "success",
-    message: `POSTING a new message for user ${user}`,
-  });
+  // throw new MongooseError('Model.prototype.save() no longer accepts a callback');
+  // Save the message without a callback
+  message
+    .save()
+    .then((savedMessage) => {
+      // Success: Send the response
+      res.json({
+        status: "success",
+        message: `POSTING a new message for user ${message.user}`,
+        data: savedMessage,
+      });
+    })
+    .catch((err) => {
+      // Handle any errors
+      console.error(err);
+      res.status(500).json({
+        status: "error",
+        message: "Error saving the message",
+      });
+    });
 });
 
 router.put("/:id", (req, res) => {
