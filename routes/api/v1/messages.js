@@ -4,24 +4,33 @@ const express = require("express");
 const router = express.Router();
 
 router.get("/", (req, res) => {
-  res.json({
-    status: "success",
-    message: "GETTING messages",
-    data: {
-      messages: [
-        {
-          id: 1,
-          user: "John Doe",
-          message: "Hello World",
-        },
-        {
-          id: 2,
-          user: "Jane Doe",
-          message: "Hello John",
-        },
-      ],
-    },
-  });
+  let user = req.query.user;
+
+  if (user) {
+    res.json({
+      status: "success",
+      message: `GETTING message for username ${user}`,
+    });
+  } else {
+    res.json({
+      status: "success",
+      message: "GETTING messages",
+      data: {
+        messages: [
+          {
+            id: 1,
+            user: "John Doe",
+            message: "Hello World",
+          },
+          {
+            id: 2,
+            user: "Jane Doe",
+            message: "Hello John",
+          },
+        ],
+      },
+    });
+  }
 });
 
 router.get("/:id", (req, res) => {
@@ -35,15 +44,6 @@ router.get("/:id", (req, res) => {
         message: "Hello World",
       },
     },
-  });
-});
-
-router.get("/", (req, res) => {
-  let user = req.query.user;
-
-  res.json({
-    status: "success",
-    message: `GET message with username ${user}`,
   });
 });
 
