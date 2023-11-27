@@ -38,13 +38,14 @@ router.get("/:id", (req, res) => {
   });
 });
 
-// router.get("/?user=username", (req, res) => {
-//     let message = req.params.username;
-//     res.json({
-//         status: 'success',
-//         message: `GET message with username ${message}`,
-//     })
-//     })
+router.get("/", (req, res) => {
+  let user = req.query.user;
+
+  res.json({
+    status: "success",
+    message: `GET message with username ${user}`,
+  });
+});
 
 router.post("/", (req, res) => {
   let user = req.body.message.user;
