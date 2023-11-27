@@ -111,11 +111,35 @@ router.post("/", (req, res) => {
 });
 
 router.put("/:id", (req, res) => {
-  let id = req.params.id;
-  res.json({
-    status: "success",
-    message: `UPDATING a message with id ${id}`,
-  });
+  const id = req.params.id;
+  const updatedMessage = {
+    user: req.body.message.user,
+    message: req.body.message.message,
+  };
+
+  Message.findByIdAndUpdate(id, updatedMessage, { new: true })
+    .exec()
+    .then((updatedDoc) => {
+      if (updatedDoc) {
+        res.json({
+          status: "success",
+          message: `UPDATING a message with id ${id}`,
+          data: updatedDoc,
+        });
+      } else {
+        res.status(404).json({
+          status: "error",
+          message: `Message with id ${id} not found`,
+        });
+      }
+    })
+    .catch((err) => {
+      console.error(err);
+      res.status(500).json({
+        status: "error",
+        message: "Error updating the message",
+      });
+    });
 });
 
 router.delete("/:id", (req, res) => {
