@@ -143,11 +143,31 @@ router.put("/:id", (req, res) => {
 });
 
 router.delete("/:id", (req, res) => {
-  let id = req.params.id;
-  res.json({
-    status: "success",
-    message: `DELETING a message with id ${id}`,
-  });
+  const id = req.params.id;
+
+  Message.findByIdAndDelete(id)
+    .exec()
+    .then((deletedDoc) => {
+      if (deletedDoc) {
+        res.json({
+          status: "success",
+          message: `DELETING a message with id ${id}`,
+          data: deletedDoc,
+        });
+      } else {
+        res.status(404).json({
+          status: "error",
+          message: `Message with id ${id} not found`,
+        });
+      }
+    })
+    .catch((err) => {
+      console.error(err);
+      res.status(500).json({
+        status: "error",
+        message: "Error deleting the message",
+      });
+    });
 });
 
 module.exports = router;
