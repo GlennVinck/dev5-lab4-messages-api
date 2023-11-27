@@ -7,7 +7,15 @@ const cors = require("cors");
 
 //include routes
 //const logger = require('./middleware/logger');
-const messagesRouter = require("./routes/api/v1/messages.js");
+const messagesRouter = require("./routes/api/v1/messages");
+
+// use pug
+app.set("view engine", "pug");
+
+// show simple homepage with pug
+app.get("/", (req, res) => {
+  res.render("index");
+});
 
 //json body parser
 app.use(express.json());
