@@ -14,48 +14,72 @@ const messageSchema = new Schema({
 
 const Message = mongoose.model("Message", messageSchema);
 
-router.get("/", (req, res) => {
-  let user = req.query.user;
+// GET route for retrieving messages
+router.get("/:id?", (req, res) => {
+  const id = req.params.id;
+  const user = req.query.user;
 
-  if (user) {
-    res.json({
-      status: "success",
-      message: `GETTING message for username ${user}`,
-    });
+  if (id) {
+    // If there's an "id" parameter, retrieve a single message from MongoDB
+    Message.findById(id)
+      .exec()
+      .then((message) => {
+        res.json({
+          status: "success",
+          message: `GETTING message with id ${id}`,
+          data: {
+            message,
+          },
+        });
+      })
+      .catch((err) => {
+        console.error(err);
+        res.status(500).json({
+          status: "error",
+          message: "Error retrieving the message",
+        });
+      });
+  } else if (user) {
+    // If there's a "user" query parameter, retrieve messages for that user from MongoDB
+    Message.find({ user })
+      .exec()
+      .then((messages) => {
+        res.json({
+          status: "success",
+          message: `GETTING messages for username ${user}`,
+          data: {
+            messages,
+          },
+        });
+      })
+      .catch((err) => {
+        console.error(err);
+        res.status(500).json({
+          status: "error",
+          message: "Error retrieving messages for the user",
+        });
+      });
   } else {
-    res.json({
-      status: "success",
-      message: "GETTING messages",
-      data: {
-        messages: [
-          {
-            id: 1,
-            user: "John Doe",
-            message: "Hello World",
+    // If there's no "id" or "user" parameter, retrieve all messages from MongoDB
+    Message.find({})
+      .exec()
+      .then((messages) => {
+        res.json({
+          status: "success",
+          message: "GETTING messages",
+          data: {
+            messages,
           },
-          {
-            id: 2,
-            user: "Jane Doe",
-            message: "Hello John",
-          },
-        ],
-      },
-    });
+        });
+      })
+      .catch((err) => {
+        console.error(err);
+        res.status(500).json({
+          status: "error",
+          message: "Error retrieving messages",
+        });
+      });
   }
-});
-
-router.get("/:id", (req, res) => {
-  let id = req.params.id;
-  res.json({
-    status: "success",
-    message: `GETTING message with id ${id}`,
-    data: {
-      message: {
-        user: "John Doe",
-        message: "Hello World",
-      },
-    },
-  });
 });
 
 router.post("/", (req, res) => {
